@@ -1,0 +1,23 @@
+# AWS Configuration
+AWS_REGION=us-east-1
+AWS_ACCOUNT_ID=717435123117
+AWS_PROFILE=latest
+
+# Application Location Configuration
+# APP_LOCATION=/path/to/application/directory
+
+# ECR Configuration
+ECR_REPOSITORY_NAME=test-20250301
+ECR_IMAGE_TAG=latest
+
+# Lambda Configuration
+LAMBDA_FUNCTION_NAME=lambda-test-20250301-function
+LAMBDA_EXECUTION_ROLE=arn:aws:iam::717435123117:role/lambda-execution-role
+LAMBDA_MEMORY_SIZE=128
+LAMBDA_TIMEOUT=30
+
+# Environment Configuration
+ENVIRONMENT=development
+LOG_LEVEL=INFO
+LOG_FILE_PATH=lambda_deployment.log
+(base) jianhuang@Jians-MacBook-Pro ~ %

@@ -14,7 +14,7 @@ from _logging.pg_logger import get_logger
 
 # Load environment variables from .env file
 env_file = os.environ.get("ENV_FILE", ".env")
-env_file = "/Users/jianhuang/anaconda3/envs/pgtask20/pgtask20/lambda_docker/aws_deployment/.env"
+env_file = "env1"
 # print(env_file)
 # with open(env_file) as f:
 #     print(f.read())
