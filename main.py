@@ -11,11 +11,11 @@ from pathlib import Path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 # Import the deployment config and logging
-from lambda_docker.deployment.config import validate_config
+from config import validate_config
 # from lambda_docker.deployment.scripts.deploy_to_ecr import deploy_to_ecr
 # from lambda_docker.deployment.scripts.update_lambda import update_lambda
 
-from lambda_docker.aws_deployment.src import deploy_to_ecr
+from src import deploy_to_ecr
 from _logging.pg_logger import get_logger, log_method, error_logger
 
 # Configure the logger
@@ -117,6 +117,7 @@ from pathlib import Path
 @click.option("--app-location", type=click.Path(exists=True), help="Path to application directory containing Dockerfile")
 @log_method(level="info")
 def main(env_file, ecr_only, lambda_only, app_location):
+
     """Main deployment function."""
     start_time = time.time()
     logger.info("Starting Lambda Docker deployment")
@@ -136,19 +137,9 @@ def main(env_file, ecr_only, lambda_only, app_location):
         logger.error("Configuration validation failed")
         return False
 
-    from src.gen_aws_lambda_handler import generate_lambda_handler
-    print(os.environ["APP_LOCATION"])
-
-
-
-    if not generate_lambda_handler(os.environ["APP_LOCATION"]):
-        logger.error("Convert lambda handler failed")
-        return False
-
-    exit(0)
 
     # Deploy to ECR
-    if not deploy_to_ecr.run():
+    if not deploy_to_ecr.run(app_location):
         logger.error("Deployment to ECR failed")
         return False
 
