@@ -75,6 +75,7 @@
 
 
 import pytest
+import os
 from moto import mock_aws
 import boto3
 from src.deploy_to_ecr import create_ecr_repository, ECR_REPOSITORY_NAME
@@ -122,3 +123,23 @@ def test_handle_exception():
 
         result = create_ecr_repository()
         assert result is False
+        
+@mock_aws
+def test_create_repository_with_custom_name():
+    client = boto3.client("ecr", region_name="us-east-1")
+    custom_name = "custom-repo-name"
+    
+    # Save original repository name
+    original_name = os.environ.get("ECR_REPOSITORY_NAME", "test-repo")
+    
+    # Set the custom repository name in environment
+    os.environ["ECR_REPOSITORY_NAME"] = custom_name
+    
+    result = create_ecr_repository()
+    
+    assert result is True
+    response = client.describe_repositories(repositoryNames=[custom_name])
+    assert response["repositories"][0]["repositoryName"] == custom_name
+    
+    # Reset environment variable
+    os.environ["ECR_REPOSITORY_NAME"] = original_name
