@@ -236,9 +236,15 @@ def tag_and_push_image():
 
 
 @log_method(level="info")
-def run(app_location: str):
+def run(app_location: str, ecr_repository_name: str = None):
     """Main function to deploy the Docker image to ECR."""
     start_time = time.time()
+    
+    # Override ECR_REPOSITORY_NAME if provided
+    if ecr_repository_name:
+        os.environ["ECR_REPOSITORY_NAME"] = ecr_repository_name
+        logger.info(f"Overriding ECR repository name: {ecr_repository_name}")
+        
     logger.info(f"Starting deployment to ECR: {ECR_REPOSITORY_NAME}")
 
     # Create repository if it doesn't exist

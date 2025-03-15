@@ -115,8 +115,9 @@ from pathlib import Path
 @click.option("--ecr-only", is_flag=True, help="Deploy to ECR only")
 @click.option("--lambda-only", is_flag=True, help="Update Lambda only")
 @click.option("--app-location", type=click.Path(exists=True), help="Path to application directory containing Dockerfile")
+@click.option("--ecr-repository-name", type=str, help="Name of the ECR repository")
 @log_method(level="info")
-def main(env_file, ecr_only, lambda_only, app_location):
+def main(env_file, ecr_only, lambda_only, app_location, ecr_repository_name):
 
     """Main deployment function."""
     start_time = time.time()
@@ -131,6 +132,11 @@ def main(env_file, ecr_only, lambda_only, app_location):
     if app_location:
         os.environ["APP_LOCATION"] = str(app_location)
         logger.info(f"Using application location: {app_location}")
+        
+    # Set ECR repository name if provided
+    if ecr_repository_name:
+        os.environ["ECR_REPOSITORY_NAME"] = ecr_repository_name
+        logger.info(f"Using ECR repository name: {ecr_repository_name}")
 
     # Validate configuration
     if not validate_config():
@@ -139,7 +145,7 @@ def main(env_file, ecr_only, lambda_only, app_location):
 
 
     # Deploy to ECR
-    if not deploy_to_ecr.run(app_location):
+    if not deploy_to_ecr.run(app_location, ecr_repository_name):
         logger.error("Deployment to ECR failed")
         return False
 
